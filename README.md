@@ -13,10 +13,8 @@ Get a MySQL export of its database.
 Install `pip3`, for example with `sudo apt-get install pip3`.
 
 Install beets: As we're writing this the `beets` package downloaded by pip is still a bit out of date.
-Therefore, if you get version 1.4.9 with `pip3 install beets`:
-
-* rollback with `pip3 uninstall beets`
-* clone from the main repository:
+Therefore, if `pip3 install beets` installs version 1.4.9: rollback with `pip3 uninstall beets`
+and clone from the main repository
 
     git clone https://github.com/beetbox/beets.git
     cd beets
