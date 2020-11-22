@@ -95,9 +95,12 @@ WHERE GROUP_NAME='MUSIC'
     if not artist or not title:
         pr(row, f"let's ask AcousticId about {path}")
         found = None
-        for score, record_id, record_title, record_artist in acoustid.match(ACOUSTID_KEY, path):
-            print("Got {} / {} / {} / {}".format(score, record_id, record_title, record_artist))
-            found = record_title
+        try:
+            for score, record_id, record_title, record_artist in acoustid.match(ACOUSTID_KEY, path):
+                print("Got {} / {} / {} / {}".format(score, record_id, record_title, record_artist))
+                found = record_title
+        except acoustid.WebServiceError as error:
+            print(error)
         if found:
             IDENTIFIED_VIA_ACOUSTID += 1
         # limit request rate to AcoustID (3 requests per seconds)
