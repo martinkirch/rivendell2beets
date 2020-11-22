@@ -11,6 +11,7 @@ from collections import defaultdict
 import re, os, sys, sqlite3, acoustid
 
 # path to Rivendell sounds (defaults to /srv/rivendell/snd/)
+# do not forget the trailing slash !
 RIVENDELL_SND = "/srv/rivendell/snd/"
 
 # I advise you to convert everything to FLAC first, with a bash loop and ffmpeg (and even ffmpeg-normalize)
@@ -85,8 +86,7 @@ WHERE GROUP_NAME='MUSIC'
     if SHITTY_TITLE.match(title):
         title = None
     
-    # TODO: prepend RIVENDELL_SND
-    path = row["CUT_NAME"] + CUT_EXTENSION
+    path = RIVENDELL_SND + row["CUT_NAME"] + CUT_EXTENSION
     if not os.path.exists(path):
         print(f"skipping file not found: {path}")
         REJECTED += 1
