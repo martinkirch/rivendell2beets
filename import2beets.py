@@ -2,8 +2,8 @@
 """
 
 TODO:
-howto force beet's import date ?
-scheduler codes mapping
+- howto force beet's import date ? -> test with drop2beets
+- scheduler codes mapping
 
 """
 from datetime import datetime
@@ -28,7 +28,7 @@ except KeyError:
 
 
 SHITTY_TITLE = re.compile(r"(\[new cart\])|(Untitled)|(Track\s+[0-9]+)", re.IGNORECASE)
-TITLE_FIXER = re.compile(r"([A-Z]?[0-9]+)?([^\-]{3,}) - (.*)")
+TITLE_FIXER = re.compile(r"([A-Z]?[0-9]+\s*\-*\s*)?([^\-]{3,}) - (.*)")
 
 conn = sqlite3.connect('rivendell.db')
 conn.row_factory = sqlite3.Row
@@ -81,11 +81,11 @@ WHERE GROUP_NAME='MUSIC'
     if not artist:
         m = TITLE_FIXER.match(title)
         if m:
-            artist = m.group(2)
-            title = m.group(3)
+            artist = m.group(2).strip()
+            title = m.group(3).strip()
     if SHITTY_TITLE.match(title):
         title = None
-    
+
     path = RIVENDELL_SND + row["CUT_NAME"] + CUT_EXTENSION
     if not os.path.exists(path):
         print(f"skipping file not found: {path}")
