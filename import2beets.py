@@ -8,7 +8,7 @@ scheduler codes mapping
 """
 from datetime import datetime
 from collections import defaultdict
-import re, os, sys, sqlite3, acoustid
+import re, os, sys, sqlite3, acoustid, time
 
 # path to Rivendell sounds (defaults to /srv/rivendell/snd/)
 # do not forget the trailing slash !
@@ -94,9 +94,14 @@ WHERE GROUP_NAME='MUSIC'
 
     if not artist or not title:
         pr(row, f"let's ask AcousticId about {path}")
-        for score, recording_id, title, artist in acoustid.match(ACOUSTID_KEY, path):
-            print("Got {} / {} / {} / {}".format(score, recording_id, title, artist))
-        #IDENTIFIED_VIA_ACOUSTID += 1
+        found = None
+        for score, record_id, record_title, record_artist in acoustid.match(ACOUSTID_KEY, path):
+            print("Got {} / {} / {} / {}".format(score, record_id, record_title, record_artist))
+            found = record_title
+        if found:
+            IDENTIFIED_VIA_ACOUSTID += 1
+        # limit request rate to AcoustID (3 requests per seconds)
+        time.sleep(0.3)
 
     if not artist or not title or not imported:
         REJECTED += 1
