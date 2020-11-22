@@ -93,11 +93,10 @@ WHERE GROUP_NAME='MUSIC'
         continue
 
     if not artist or not title:
-        IDENTIFIED_VIA_ACOUSTID += 1
-        if IDENTIFIED_VIA_ACOUSTID < 3:
-            pr(row, f"let's ask AcousticId about {path}")
-            for score, recording_id, title, artist in acoustid.match(ACOUSTID_KEY, path):
-                print("Got {} / {} / {} / {}".format(score, recording_id, title, artist))
+        pr(row, f"let's ask AcousticId about {path}")
+        for score, recording_id, title, artist in acoustid.match(ACOUSTID_KEY, path):
+            print("Got {} / {} / {} / {}".format(score, recording_id, title, artist))
+        #IDENTIFIED_VIA_ACOUSTID += 1
 
     if not artist or not title or not imported:
         REJECTED += 1
