@@ -109,7 +109,7 @@ class Rivendell2BeetsPlugin(BeetsPlugin):
 
     def _main(self, lib, opts, args):
         logging.basicConfig(
-            level=logging.DEBUG,
+            level=logging.INFO,
             format="%(asctime)s [%(filename)s:%(lineno)s] %(levelname)s %(message)s"
         )
         self.register_listener('import_begin', self.on_import_begin)
@@ -145,15 +145,15 @@ class Rivendell2BeetsPlugin(BeetsPlugin):
             try:
                 origin = row['ORIGIN_DATETIME']
                 if origin is None:
-                    #pr(row, "rejecting because origin is null: ")
+                    pr(row, "rejecting because origin is null: ")
                     imported = None
                 else:
                     imported = datetime.fromisoformat(origin)
             except TypeError:
-                print("cannot parse {!r}".format(origin))
+                logging.error("cannot parse {!r}".format(origin))
             self.SEEN += 1
             if row["SCHED_CODES"] is None:
-                #pr(row, "Null scheduler codes: ")
+                pr(row, "Null scheduler codes: ")
                 imported = None
             else:
                 for code in row["SCHED_CODES"].split(" "):
@@ -171,7 +171,7 @@ class Rivendell2BeetsPlugin(BeetsPlugin):
 
             path = RIVENDELL_SND + row["CUT_NAME"] + CUT_EXTENSION
             if not os.path.exists(path):
-                #print(f"skipping file not found: {path}")
+                logging.error(f"skipping file not found: {path}")
                 self.REJECTED += 1
                 path = None
 
@@ -179,14 +179,14 @@ class Rivendell2BeetsPlugin(BeetsPlugin):
                 pr(row, f"let's ask AcousticId about {path}")
                 try:
                     for score, record_id, record_title, record_artist in acoustid.match(ACOUSTID_KEY, path):
-                        print("Got {} / {} / {} / {}".format(score, record_id, record_title, record_artist))
+                        logging.info("Got {} / {} / {} / {}".format(score, record_id, record_title, record_artist))
                         self.attributes['mb_trackid'] = record_id
                         artist = record_artist
                         title = record_title
                         self.IDENTIFIED_VIA_ACOUSTID += 1
                         break
                 except acoustid.WebServiceError as error:
-                    print(error)
+                    logging.error(error)
                 # limit request rate to AcoustID (3 requests per seconds)
                 time.sleep(0.3)
 
