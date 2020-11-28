@@ -5,6 +5,11 @@ from RDLibrary to [beets](https://beets.io).
 It uses the "Artist" and "Title" tags from RDLibrary to re-tag files.
 It also uses [acoustid](https://acoustid.org) to hopefully fix missing tags or wrong tags like `[new cart]`.
 
+This is intended for big music libraries (over 10k carts) that have lived a long time in Rivendell.
+In perticular we translate Rivendell's importation date:
+if you've keep on importing music to Rivendell until the migration,
+you'll still be able to filter recent tracks with a beets filter like `added:-3m..` (added 3 months ago).
+
 ## Before starting
 
 Identify where your Rivendell installation is storing its sounds (typically `/srv/rivendell/snd`).
@@ -57,6 +62,8 @@ When you'll launch the import it must be in the current folder.
 The plugin contains a map of scheduler code : each code is associated either to `None`
 or to a `dict` that will be merged with items' attributes.
 See examples in source.
+
+Each rivendell cart's importation time will be imported to beets' `added` field.
 
 ## The import itself
 
