@@ -196,6 +196,7 @@ class Rivendell2BeetsPlugin(BeetsPlugin):
                 self.attributes["added"] = imported.isoformat()[0:19].replace('T', ' ')
                 logging.info("Processing %s", path)
                 import_files(lib, [path], None)
+                self.IMPORTED += 1
             elif path:
                 self.REJECTED += 1
                 os.rename(path, "{}/{} - {} - {} - {}.{}".format(
