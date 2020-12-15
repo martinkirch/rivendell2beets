@@ -193,7 +193,7 @@ class Rivendell2BeetsPlugin(BeetsPlugin):
             if path and artist and title and imported:
                 self.attributes["artist"] = artist
                 self.attributes["title"] = title
-                self.attributes["added"] = imported.isoformat()[0:19].replace('T', ' ')
+                self.attributes["added"] = imported.timestamp()
                 logging.info("Processing %s", path)
                 import_files(lib, [path], None)
                 self.IMPORTED += 1
