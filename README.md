@@ -52,12 +52,12 @@ see `conversion.sh`. You'll have to:
 This repository includes `mysql2sqlite` as a submodule.
 Convert your Rivendell DB dump to Sqlite with:
 
-./mysql2sqlite database-20201118-0625.sql | sqlite3 rivendell.db
+    ./mysql2sqlite database-20201118-0625.sql | sqlite3 rivendell.db
 
 The result file, `rivendell.db`, will be used by the import script.
 When you'll launch the import it must be in the current folder.
 
-## Scheduler codes
+## Scheduler codes
 
 The plugin contains a map of scheduler code : each code is associated either to `None`
 or to a `dict` that will be merged with items' attributes.
@@ -65,7 +65,7 @@ See examples in source.
 
 Each rivendell cart's importation time will be imported to beets' `added` field.
 
-## The import itself
+## The import itself
 
 Launch it with
 
@@ -79,3 +79,5 @@ Where
 A file that is not correctly tagged in Rivendell (like "[new cart]", "Track 01" or nothing)
 and not recoginzed by AcousticID will be moved to a "failed" subfolder,
 renamed with the few things we knew form Rivendell. You will have to import those manually.
+
+For some reason, tags are not written to files. You might want to run `beet write`.
